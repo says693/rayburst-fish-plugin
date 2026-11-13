@@ -39,7 +39,7 @@
     "page.js": "f70a363b9c9c7df0a8590b0ea05df64cf5e93d00521b30fe54544dc1d856f131",
     "page-utils.js": "116c8181a5a5932da16726e718152bcd66d5ac1200e22ff1313893ef170129c6",
     "sdk/node/plugin.mjs": "f51558b6f4be03b957977f85eb2550283f0556e311a249c7b8f8e90870327b64",
-    "sdk/browser/bridge.js": "ca20b96faad3ece2eaa8e30c5941fce20123f199e5ac43abb776e8d657c1a162",
+    "sdk/browser/bridge.js": "0d780e594bdf368fab6b8b43fe299e93fed4621161108ee3cf64c446cff3a39b",
     "sdk/LICENSE.txt": "c790de22db0116563e473ee71383d4cd574fe2989cdd21dfec50890e1e8a9065"
   }
 }
