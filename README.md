@@ -6,7 +6,7 @@
 
 在 FISH-Dock 中直接管理 [AnInsomniacy/rayburst](https://github.com/AnInsomniacy/rayburst) 下载器。插件通过 Rayburst 本机 aria2 JSON-RPC 工作，不经过第三方服务器。
 
-> 非官方 Rayburst 集成。插件 ID：`says693.rayburst`；当前版本：`1.0.0`；宿主 API：1；平台：Windows x64。
+> 非官方 Rayburst 集成。插件 ID：`says693.rayburst`；当前源码版本：`1.0.1`；宿主 API：1；平台：Windows x64。
 
 ## 功能
 
@@ -49,6 +49,8 @@ Release 同时提供：
 | `catalog.json` | FISH-Dock 商店目录 schema 1 兼容元数据 |
 | `SHA256SUMS.txt` | 上述发布文件的校验值 |
 
+npm 包名按宿主第三方发现规则使用 `fish-dock-plugin-rayburst`。当前项目标记为 private，尚未发布 npm 包，不能通过 npm 商店安装。
+
 `catalog.json` 仅表示元数据格式兼容，不表示插件已被 FISH-Dock 官方商店收录。
 
 ## 从源码构建
@@ -59,7 +61,7 @@ npm run check
 npm test
 npm run build
 npm run verify
-node scripts/assert-release.mjs v1.0.0
+node scripts/assert-release.mjs v1.0.1
 ```
 
 构建产物位于 `dist/`。`fflate` 与 `jsdom` 仅用于构建和测试，不会进入 `.fish-plugin` 运行包。ZIP 条目使用固定时间戳，同一源码可重复得到相同哈希。
@@ -86,7 +88,7 @@ node scripts/assert-release.mjs v1.0.0
 
 发布包结构、能力声明、SDK 协议、资源哈希、页面限制和 Release 规则见 [PLUGIN-COMPLIANCE.md](docs/PLUGIN-COMPLIANCE.md)。
 
-当前共 22 项自动化测试，覆盖：
+当前共 25 项自动化测试，覆盖：
 
 - 本机 HTTP 模拟 Rayburst RPC：认证、批量调用、任务快照、添加、暂停/恢复、移除、错误码。
 - jsdom 页面测试：统计渲染、筛选、密钥不回显、添加任务、移除二次确认。

@@ -6,6 +6,7 @@
 | --- | --- | --- |
 | 发行格式 | ZIP 格式的 `.fish-plugin` | `npm run verify` 解压并校验文件集合 |
 | 清单版本 | `schema: 1`、`hostApi: 1` | `plugin.json` 与验包断言 |
+| npm 包名 | `fish-dock-plugin-rayburst`，符合宿主第三方发现命名规则；尚未发布 npm | 包名测试 |
 | 插件标识 | `says693.rayburst` | 后端握手、页面 ticket 与协议测试一致 |
 | 目标平台 | `windows-x86_64` | 清单、CI 与 Release 均使用 Windows |
 | Node 运行时 | 22.17.0 或更新 | `engines.node`，CI 固定 22.17.0 |
@@ -28,7 +29,7 @@
 | SDK 许可 | 原样保留 `sdk/LICENSE.txt` | 运行包与源码包检查 |
 | 可复现构建 | ZIP 固定 mtime，开发依赖不进入运行包 | 连续构建哈希比较 |
 | 商店目录 | Release 生成 schema 1 `catalog.json` | 校验 ID、版本、平台、URL、大小与哈希 |
-| CI | Windows 上执行检查、24 项测试、构建和验包 | `.github/workflows/ci.yml` |
+| CI | Windows 上执行检查、25 项测试、构建和验包 | `.github/workflows/ci.yml` |
 | Release | `v*` 标签触发，重新构建并上传五项资产 | `.github/workflows/release.yml` |
 
 ## 发布文件

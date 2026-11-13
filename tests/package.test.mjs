@@ -39,3 +39,12 @@ test('发行包只包含声明资源，所有 SHA-256 与宿主契约一致', as
   assert.ok(source['scripts/build.mjs'])
   assert.equal(Object.keys(source).some(name => name.startsWith('node_modules/') || name.startsWith('dist/')), false)
 })
+
+
+test('npm 包名符合宿主第三方插件发现规则', () => {
+  const packageJson = JSON.parse(fs.readFileSync(path.join(root, 'package.json'), 'utf8'))
+  const lock = JSON.parse(fs.readFileSync(path.join(root, 'package-lock.json'), 'utf8'))
+  assert.match(packageJson.name, /^(?:@[a-z0-9][a-z0-9._~-]*\/)?fish-dock-plugin-[a-z0-9][a-z0-9._~-]*$/)
+  assert.equal(lock.name, packageJson.name)
+  assert.equal(lock.packages[''].name, packageJson.name)
+})
