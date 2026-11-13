@@ -14,9 +14,9 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: 22.17.0
           cache: npm
@@ -31,7 +31,7 @@ jobs:
       - name: Verify Dock package and catalog
         run: npm run verify
       - name: Upload verified artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: rayburst-fish-plugin
           path: dist/
