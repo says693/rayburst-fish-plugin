@@ -31,7 +31,7 @@ jobs:
       - name: Verify Dock package and catalog
         run: npm run verify
       - name: Upload verified artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: rayburst-fish-plugin
           path: dist/
