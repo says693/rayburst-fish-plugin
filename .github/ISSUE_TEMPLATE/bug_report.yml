@@ -1,0 +1,37 @@
+name: Bug 报告
+description: 报告插件功能、连接或打包问题
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: 插件版本
+      placeholder: 1.0.0
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境
+      description: FISH-Dock、Rayburst、Node.js 与 Windows 版本
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: 复现步骤
+      description: 列出操作步骤、预期行为与实际行为
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: 日志
+      description: 提交前移除 RPC 密钥、个人路径和真实下载链接
+      render: text
+  - type: checkboxes
+    id: redacted
+    options:
+      - label: 我已移除密钥、个人路径和真实下载链接
+        required: true

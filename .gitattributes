@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.fish-plugin binary
+*.zip binary
+*.png binary

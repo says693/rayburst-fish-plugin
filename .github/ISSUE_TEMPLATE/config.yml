@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: FISH-Dock 宿主问题
+    url: https://github.com/Fish-under-sea/FISH-Dock/issues
+    about: 仅报告不涉及的插件源码的宿主问题
+  - name: Rayburst 下载器问题
+    url: https://github.com/AnInsomniacy/rayburst/issues
+    about: 仅报告下载器自身的问题

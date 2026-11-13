@@ -1,0 +1,45 @@
+{
+  "schema": 1,
+  "id": "says693.rayburst",
+  "name": "Rayburst 下载",
+  "version": "1.0.0",
+  "hostApi": 1,
+  "platforms": [
+    "windows-x86_64"
+  ],
+  "storage": {
+    "directory": ".plugin.says693.rayburst",
+    "dataSchema": 1
+  },
+  "backend": {
+    "runtime": "node",
+    "entry": "backend.mjs",
+    "args": []
+  },
+  "capabilities": [
+    "storage",
+    "network",
+    "services"
+  ],
+  "pages": [
+    {
+      "id": "downloads",
+      "title": "Rayburst 下载",
+      "entry": "page.html"
+    }
+  ],
+  "files": {
+    "README.md": "afd31269ccf96bd955f365dcb34a4e45e3c4235e7f1cd3b53fb27034f0a01614",
+    "LICENSE": "db8b4b053ee107d49f22c15cf56117638afb3575c81fcd7188d272c9a90de345",
+    "THIRD_PARTY_NOTICES.md": "b0315a6ec1861ba5996d34925d0f34d217fcc1d655df75e3a7d784fcd8fdb38d",
+    "backend.mjs": "541da0db9a0e05d07452b9a2420be2694a27e752ecc0511fbc52840882eacb2c",
+    "rayburst-service.mjs": "6d0cfddf31b9c926b42f63ac082626423d01e5182a26be2c1b0b11765f8d80c0",
+    "page.html": "399ad236b4179d36cb09caf0157d527da886a58a1459f8f216d8dd2192c2facd",
+    "page.css": "ab985f3de810a14f98a846b24c7dbd3b6cfe989a97efc56ac37f564f3ed388e4",
+    "page.js": "f70a363b9c9c7df0a8590b0ea05df64cf5e93d00521b30fe54544dc1d856f131",
+    "page-utils.js": "116c8181a5a5932da16726e718152bcd66d5ac1200e22ff1313893ef170129c6",
+    "sdk/node/plugin.mjs": "f51558b6f4be03b957977f85eb2550283f0556e311a249c7b8f8e90870327b64",
+    "sdk/browser/bridge.js": "ca20b96faad3ece2eaa8e30c5941fce20123f199e5ac43abb776e8d657c1a162",
+    "sdk/LICENSE.txt": "c790de22db0116563e473ee71383d4cd574fe2989cdd21dfec50890e1e8a9065"
+  }
+}

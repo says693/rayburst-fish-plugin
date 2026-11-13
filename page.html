@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Rayburst 下载</title>
+  <link rel="stylesheet" href="page.css">
+  <script src="sdk/browser/bridge.js" defer></script>
+  <script src="page-utils.js" defer></script>
+  <script src="page.js" defer></script>
+</head>
+<body>
+<main>
+  <header class="app-header">
+    <div>
+      <div class="title-row">
+        <span class="brand" aria-hidden="true">R</span>
+        <h1>Rayburst 下载</h1>
+      </div>
+      <p id="engine-version" class="muted">正在读取引擎信息</p>
+    </div>
+    <div class="header-actions">
+      <span id="connection" class="connection" data-tone="idle"><span aria-hidden="true"></span>未连接</span>
+      <button id="settings-toggle" type="button" aria-expanded="false" aria-controls="settings-panel">连接设置</button>
+    </div>
+  </header>
+
+  <p id="status" class="banner" data-tone="idle" role="status" aria-live="polite">正在连接 Rayburst…</p>
+
+  <section class="stats" aria-label="下载统计">
+    <div class="stat"><span>下载速度</span><strong id="down-speed">—</strong></div>
+    <div class="stat"><span>上传速度</span><strong id="up-speed">—</strong></div>
+    <div class="stat"><span>下载中</span><strong id="active-count">—</strong></div>
+    <div class="stat"><span>等待 / 暂停</span><strong id="waiting-count">—</strong></div>
+  </section>
+
+  <form id="add-panel" class="card" hidden>
+    <div class="card-heading">
+      <div><h2>添加下载</h2><p>每行一个链接，保存目录沿用 Rayburst 设置。</p></div>
+      <button id="add-cancel" type="button" class="quiet">收起</button>
+    </div>
+    <label for="urls">下载链接</label>
+    <textarea id="urls" rows="4" required spellcheck="false" placeholder="https://example.com/file.zip&#10;magnet:?xt=urn:btih:…"></textarea>
+    <label for="filename">自定义文件名（可选，仅单个 HTTP/FTP/SFTP 链接）</label>
+    <input id="filename" type="text" maxlength="240" autocomplete="off" placeholder="沿用服务器文件名">
+    <p class="muted">支持 HTTP、HTTPS、FTP、SFTP、磁力、ED2K 和迅雷链接，每次最多 20 个。</p>
+    <div class="actions"><button type="submit" class="primary">开始下载</button></div>
+  </form>
+
+  <form id="settings-panel" class="card" hidden>
+    <div class="card-heading">
+      <div><h2>本机连接</h2><p>连接 127.0.0.1 上的 Rayburst aria2 JSON-RPC。</p></div>
+    </div>
+    <div class="form-grid">
+      <div>
+        <label for="port">RPC 端口</label>
+        <input id="port" type="number" min="1" max="65535" step="1" required value="29100">
+      </div>
+      <div>
+        <label for="poll">自动刷新</label>
+        <select id="poll">
+          <option value="1000">每 1 秒</option>
+          <option value="2000">每 2 秒</option>
+          <option value="2500">每 2.5 秒</option>
+          <option value="5000">每 5 秒</option>
+          <option value="10000">每 10 秒</option>
+        </select>
+      </div>
+    </div>
+    <label for="secret">RPC 密钥</label>
+    <input id="secret" type="password" maxlength="1024" autocomplete="new-password" placeholder="首次填写；保存后不再回显">
+    <p id="secret-state" class="muted">尚未保存密钥</p>
+    <label class="check" for="clear-secret"><input id="clear-secret" type="checkbox">保存时清除已存密钥（仅在 Rayburst 中也为空时使用）</label>
+    <p class="muted">端口与密钥位于 Rayburst「设置 → 高级 → RPC 设置」。密钥由 FISH-Dock 使用当前 Windows 用户加密保存。</p>
+    <div class="actions">
+      <button type="submit" class="primary">保存设置</button>
+      <button id="test-connection" type="button">保存并测试</button>
+    </div>
+  </form>
+
+  <div class="toolbar">
+    <button id="add-toggle" type="button" class="primary" aria-expanded="false" aria-controls="add-panel">添加下载</button>
+    <button id="refresh" type="button">刷新</button>
+    <button id="pause-all" type="button">全部暂停</button>
+    <button id="resume-all" type="button">全部恢复</button>
+  </div>
+  <div class="filters">
+    <label for="filter">状态</label>
+    <select id="filter">
+      <option value="all">全部任务</option>
+      <option value="active">下载中</option>
+      <option value="waiting">等待 / 暂停</option>
+      <option value="complete">已完成</option>
+      <option value="error">出错</option>
+      <option value="removed">已移除</option>
+    </select>
+    <label for="search" class="sr-only">搜索任务</label>
+    <input id="search" type="search" placeholder="搜索文件名、GID 或目录" autocomplete="off">
+  </div>
+
+  <section class="task-section" aria-labelledby="task-heading">
+    <div class="section-heading"><h2 id="task-heading">下载任务</h2><span id="task-count" class="muted"></span></div>
+    <div id="tasks" class="tasks"></div>
+    <div id="empty" class="empty" data-tone="empty">
+      <strong>暂无匹配任务</strong>
+      <p>点击「添加下载」提交链接，或调整上方筛选条件。</p>
+    </div>
+    <p id="truncated" class="muted" hidden>任务较多，当前仅显示活跃任务、前 100 条等待任务和最近 30 条停止记录。</p>
+  </section>
+  <footer><span>移除任务不会删除已下载文件。</span><span>数据每 <span id="poll-label">2.5</span> 秒自动刷新</span></footer>
+</main>
+</body>
+</html>
