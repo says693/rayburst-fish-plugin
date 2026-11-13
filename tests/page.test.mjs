@@ -121,3 +121,25 @@ test('保存设置发送端口与刷新间隔，空密钥表示保留', async t 
   assert.equal(document.getElementById('secret').value, '')
   await waitFor(() => document.getElementById('status').textContent === '连接设置已保存')
 })
+
+
+test('打开设置后焦点进入输入框，不禁用整个页面', async t => {
+  const { document } = await fixture(t)
+  const toggle = document.getElementById('settings-toggle')
+  toggle.focus()
+  toggle.click()
+  await waitFor(() => !document.getElementById('settings-panel').hidden)
+  assert.equal(document.activeElement.id, 'port')
+  assert.equal(document.getElementById('filter').disabled, false)
+})
+
+test('移除确认可以通过 Escape 取消并恢复焦点', async t => {
+  const { document, calls } = await fixture(t)
+  const selector = `[data-gid="${gid('a')}"] [data-action="remove"]`
+  document.querySelector(selector).focus()
+  document.querySelector(selector).click()
+  assert.equal(document.activeElement.textContent, '确认移除')
+  document.dispatchEvent(new document.defaultView.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }))
+  assert.equal(document.activeElement.textContent, '移除')
+  assert.equal(calls.some(row => row.method === 'rayburst.action'), false)
+})

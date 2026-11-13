@@ -1,6 +1,6 @@
 # FISH-Dock 插件标准对照
 
-本文记录 `says693.rayburst` v1.0.0 的发布契约。依据为 FISH-Dock 源码提交 `0626a19` 与 FISH-DOCK-Plugins 开发者文档；本仓库是独立第三方插件仓库，不是官方插件集的一部分。
+本文记录 `says693.rayburst` v1.0.1 的发布契约。依据为 FISH-Dock 源码提交 `0626a19` 与 FISH-DOCK-Plugins 开发者文档提交 `af6ddd9`；本仓库是独立第三方插件仓库，不是官方插件集的一部分。
 
 | 项目 | 发布实现 | 验证方式 |
 | --- | --- | --- |
@@ -9,6 +9,8 @@
 | 插件标识 | `says693.rayburst` | 后端握手、页面 ticket 与协议测试一致 |
 | 目标平台 | `windows-x86_64` | 清单、CI 与 Release 均使用 Windows |
 | Node 运行时 | 22.17.0 或更新 | `engines.node`，CI 固定 22.17.0 |
+| 自启动 | 不启动或管理本机服务，显式声明 `behaviors.autostart: false` | 验包测试 |
+| 页面设计 | 宿主主题、语义状态色、焦点与强制颜色模式 | 页面样式与键盘操作测试；真实 WebView 待验收 |
 | SDK 入口 | 现行 `createPlugin` | 真实 SDK 子进程握手测试 |
 | 宿主协议 | 换行 JSON、请求 ID、稳定错误码 | `tests/protocol.test.mjs` |
 | 帧大小 | 快照压缩至 850,000 字节以内 | 超长中文任务快照测试 |
@@ -26,7 +28,7 @@
 | SDK 许可 | 原样保留 `sdk/LICENSE.txt` | 运行包与源码包检查 |
 | 可复现构建 | ZIP 固定 mtime，开发依赖不进入运行包 | 连续构建哈希比较 |
 | 商店目录 | Release 生成 schema 1 `catalog.json` | 校验 ID、版本、平台、URL、大小与哈希 |
-| CI | Windows 上执行检查、22 项测试、构建和验包 | `.github/workflows/ci.yml` |
+| CI | Windows 上执行检查、24 项测试、构建和验包 | `.github/workflows/ci.yml` |
 | Release | `v*` 标签触发，重新构建并上传五项资产 | `.github/workflows/release.yml` |
 
 ## 发布文件

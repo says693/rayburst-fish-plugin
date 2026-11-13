@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "says693.rayburst",
   "name": "Rayburst 下载",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "hostApi": 1,
   "platforms": [
     "windows-x86_64"
@@ -35,11 +35,14 @@
     "backend.mjs": "541da0db9a0e05d07452b9a2420be2694a27e752ecc0511fbc52840882eacb2c",
     "rayburst-service.mjs": "6d0cfddf31b9c926b42f63ac082626423d01e5182a26be2c1b0b11765f8d80c0",
     "page.html": "399ad236b4179d36cb09caf0157d527da886a58a1459f8f216d8dd2192c2facd",
-    "page.css": "ab985f3de810a14f98a846b24c7dbd3b6cfe989a97efc56ac37f564f3ed388e4",
-    "page.js": "f70a363b9c9c7df0a8590b0ea05df64cf5e93d00521b30fe54544dc1d856f131",
+    "page.css": "5ec8c6ed8571d14fbf5c946de753ad61c787d92d6cdc3368e66ec92785ef5e28",
+    "page.js": "8de5929ccacb06e7fbedc875e58b55899eb292238a483fbb6011ab0113d0dfc9",
     "page-utils.js": "116c8181a5a5932da16726e718152bcd66d5ac1200e22ff1313893ef170129c6",
     "sdk/node/plugin.mjs": "f51558b6f4be03b957977f85eb2550283f0556e311a249c7b8f8e90870327b64",
     "sdk/browser/bridge.js": "0d780e594bdf368fab6b8b43fe299e93fed4621161108ee3cf64c446cff3a39b",
     "sdk/LICENSE.txt": "c790de22db0116563e473ee71383d4cd574fe2989cdd21dfec50890e1e8a9065"
+  },
+  "behaviors": {
+    "autostart": false
   }
 }

@@ -18,6 +18,7 @@ test('发行包只包含声明资源，所有 SHA-256 与宿主契约一致', as
   const manifest = JSON.parse(Buffer.from(files['plugin.json']).toString('utf8'))
   assert.equal(manifest.schema, 1)
   assert.equal(manifest.hostApi, 1)
+  assert.deepEqual(manifest.behaviors, { autostart: false })
   assert.equal(manifest.id, 'says693.rayburst')
   assert.deepEqual(manifest.capabilities, ['storage', 'network', 'services'])
   assert.deepEqual(Object.keys(files).sort(), ['plugin.json', ...Object.keys(manifest.files)].sort())

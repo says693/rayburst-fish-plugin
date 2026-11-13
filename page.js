@@ -8,10 +8,12 @@ const state = {
   port: 29100,
   hasSecret: false,
   refreshing: false,
+  connectionError: false,
   busy: false,
   pendingRemove: '',
   removeTimer: null,
   refreshTimer: null,
+  busyControl: null,
 }
 
 function setStatus(tone, message) {
@@ -29,8 +31,20 @@ function setConnection(connected, label) {
 
 function setBusy(busy) {
   state.busy = busy
-  document.querySelector('main').setAttribute('aria-busy', String(busy))
-  document.querySelectorAll('button, input, select, textarea').forEach(control => { control.disabled = busy })
+  $('status').setAttribute('aria-busy', String(busy))
+  if (busy && document.activeElement?.tagName === 'BUTTON') {
+    const button = document.activeElement
+    state.busyControl = { button, label: button.textContent, title: button.title }
+    button.disabled = true
+    button.title = '正在处理当前操作'
+    button.textContent = '处理中…'
+  } else if (!busy && state.busyControl) {
+    const { button, label, title } = state.busyControl
+    button.disabled = false
+    button.title = title
+    button.textContent = label
+    state.busyControl = null
+  }
 }
 
 function element(tag, className, content) {
@@ -96,7 +110,15 @@ function render() {
   $('engine-version').textContent = `${snapshot.engine.product} ${snapshot.engine.version} · RPC ${snapshot.engine.rpcVersion || '—'} · 端口 ${state.port}`
   $('poll-label').textContent = String(state.pollMs / 1000)
   const tasks = utils.filterTasks(snapshot.tasks, state.filter, state.query)
+  const focused = document.activeElement
+  const focusedGid = focused?.closest('[data-gid]')?.dataset.gid
+  const focusedAction = focused?.dataset.action
   $('tasks').replaceChildren(...tasks.map(renderTask))
+  if (focusedGid && focusedAction) {
+    const replacement = [...$('tasks').querySelectorAll('button[data-action]')].find(button =>
+      button.dataset.action === focusedAction && button.closest('[data-gid]').dataset.gid === focusedGid)
+    replacement?.focus()
+  }
   $('empty').hidden = tasks.length > 0
   $('task-count').textContent = tasks.length === snapshot.tasks.length ? `${tasks.length} 条` : `${tasks.length} / ${snapshot.tasks.length} 条`
   $('truncated').hidden = !snapshot.truncated.waiting && !snapshot.truncated.stopped
@@ -110,10 +132,12 @@ async function refresh(silent = false) {
     state.snapshot = await FishDock.call('rayburst.snapshot', {})
     render()
     setConnection(true, '已连接')
-    if (!silent) setStatus('ok', '已连接，任务列表已更新')
+    if (!silent || state.connectionError) setStatus('ok', '已连接，任务列表已更新')
+    state.connectionError = false
   } catch (error) {
     setConnection(false, '连接失败')
-    if (!silent || !state.snapshot) setStatus('bad', utils.errorMessage(error))
+    state.connectionError = true
+    setStatus('bad', `${utils.errorMessage(error)}${state.snapshot ? '；当前列表可能已过期，请检查连接后重试' : ''}`)
     throw error
   } finally {
     state.refreshing = false
@@ -121,7 +145,10 @@ async function refresh(silent = false) {
 }
 
 async function run(operation) {
-  if (state.busy) return false
+  if (state.busy) {
+    setStatus('busy', '请等待当前操作完成后重试')
+    return false
+  }
   setBusy(true)
   setStatus('busy', '正在处理…')
   try {
@@ -235,6 +262,7 @@ $('settings-panel').addEventListener('submit', event => {
 
 $('test-connection').onclick = () => run(async () => {
   await saveSettings()
+  scheduleRefresh()
   const result = await FishDock.call('rayburst.test', {})
   await refresh(true)
   return `连接成功：${result.product} ${result.version}`
@@ -266,6 +294,7 @@ $('tasks').addEventListener('click', event => {
     clearPendingRemove()
     state.pendingRemove = gid
     render()
+    ;[...$('tasks').querySelectorAll('button[data-action=remove]')].find(item => item.closest('[data-gid]').dataset.gid === gid)?.focus()
     setStatus('busy', '再次点击「确认移除」只会移除任务记录，不会删除文件')
     state.removeTimer = setTimeout(clearPendingRemove, 5000)
     return
@@ -280,6 +309,14 @@ $('tasks').addEventListener('click', event => {
     await refresh(true)
     return action === 'pause' ? '任务已暂停' : action === 'resume' ? '任务已恢复' : '任务记录已移除，文件未删除'
   })
+})
+
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || !state.pendingRemove) return
+  const gid = state.pendingRemove
+  clearPendingRemove()
+  ;[...$('tasks').querySelectorAll('button[data-action=remove]')].find(item => item.closest('[data-gid]').dataset.gid === gid)?.focus()
+  setStatus('idle', '已取消移除')
 })
 
 function scheduleRefresh() {
